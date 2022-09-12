@@ -6,6 +6,18 @@ steps:
     key: step-1
     command: "sh scripts/run.sh"
 
+  - name: "step 3:"
+    key: step-3
+    command: "echo step3"
+
+  - name: "step 4:"
+    depends_on: step-3
+    command: "echo step4 depends on step3"
+
+  - name: "step 5:"
+    depends_on: step-1
+    command: "echo step5 depends on step1"
+
   - wait
 
   - name: "step 2:"
