@@ -1,0 +1,7 @@
+agents:
+  queue: timvel-agent-1
+
+steps:
+  - name: "step 1:"
+    key: step-1
+    command: "sh scripts/run.sh"
