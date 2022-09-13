@@ -4,7 +4,7 @@ agents:
 steps:
   - name: "step 1:"
     key: step-1
-    command: "cat /proc/version"
+    command: sh scripts/run.sh
 
   - name: "step 3:"
     key: step-3
