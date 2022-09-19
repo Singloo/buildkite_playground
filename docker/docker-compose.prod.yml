@@ -1,0 +1,12 @@
+version: '3'
+services:
+  web:
+    image: playground/buildkite
+    build:
+      context: .
+    volumes:
+      - ../public:/app/public
+      - ../src:/app/src
+      - ../build:/app/build
+    entrypoint: docker-entrypoint.sh
+    command: npm run build
