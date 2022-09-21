@@ -2,24 +2,16 @@ agents:
   queue: timvel-agent-1
 
 steps:
-  - name: "step 1:"
+  - label: "Build docker image"
     key: step-1
-    command: sh scripts/run.sh
+    command: sh docker-build-prod.sh
 
-  - name: "step 3:"
-    key: step-3
-    command: "echo step3"
+  - label: "Build web"
+    key: step-2
+    command: "sh docker-compose-up.sh"
 
-  - name: "step 4:"
-    depends_on: step-3
-    command: "echo step4 depends on step3"
-
-  - name: "step 5:"
-    depends_on: step-1
-    command: "echo step5 depends on step1"
-
-  - wait
-
-  - name: "step 2:"
-    label: "label 2"
-    command: "echo step2"
+  - label: "Log build dir"
+    command: node ./scripts/logDir.js
+    plugins:
+      - sv-oss/node-n#v0.1.2:
+          node-version: v16.13.1
