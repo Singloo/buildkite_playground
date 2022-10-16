@@ -6,7 +6,7 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
     volumes:
-      - ../:app/
+      - ../:./
       # - ../public:/app/public
       # - ../src:/app/src
       # - ../build:/app/build
