@@ -4,9 +4,10 @@ services:
     image: playground/buildkite
     build:
       context: .
+      dockerfile: ./Dockerfile
     volumes:
-      - ../public:/app/public
-      - ../src:/app/src
-      - ../build:/app/build
+      - ./public:/app/public
+      - ./src:/app/src
+      - ./build:/app/build
     entrypoint: docker-entrypoint.sh
     command: npm run build
