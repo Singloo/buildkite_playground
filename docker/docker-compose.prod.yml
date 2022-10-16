@@ -3,8 +3,8 @@ services:
   web:
     image: playground/buildkite
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ..
+      dockerfile: ./docker/Dockerfile
     volumes:
       - ./public:/app/public
       - ./src:/app/src
