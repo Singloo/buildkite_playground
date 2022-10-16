@@ -3,7 +3,7 @@ agents:
 
 steps:
   - label: "Log env"
-    command: "sh ./scripts/run.sh"
+    command: 'bach -c "sh ./scripts/run.sh"'
 
   - label: "Build docker image"
     key: step-1
