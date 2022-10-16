@@ -7,9 +7,9 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-COPY ./package.json ./
-COPY ./package-lock.json ./
-COPY ./tsconfig.json ./
+COPY ../package.json ./
+COPY ../package-lock.json ./
+COPY .//tsconfig.json ./
 
 ENTRYPOINT [ "/bin/sh" ]
 
