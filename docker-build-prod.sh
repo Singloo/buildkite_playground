@@ -1,2 +1,2 @@
 set -x
-docker-compose -f ./docker/Dockerfile build
+docker-compose -f ./docker/docker-compose.prod.yml build
