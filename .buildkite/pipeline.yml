@@ -16,6 +16,3 @@ steps:
 
   - label: "Log build dir"
     command: node ./scripts/logDir.js
-    plugins:
-      - sv-oss/node-n#v0.1.2:
-          node-version: v16.13.1
