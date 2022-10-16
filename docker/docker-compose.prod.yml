@@ -12,4 +12,4 @@ services:
       # - ../build:/app/build
       # - ../scripts:/app/scripts
     entrypoint: docker-entrypoint.sh
-    command: ls & sh test.sh
+    command: ls && sh test.sh
