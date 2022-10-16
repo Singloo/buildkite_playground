@@ -10,4 +10,4 @@ services:
       - ../src:/app/src
       - ../build:/app/build
     entrypoint: docker-entrypoint.sh
-    command: npm run build
+    command: ls
