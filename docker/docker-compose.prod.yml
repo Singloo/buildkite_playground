@@ -11,5 +11,5 @@ services:
       - ../build:/app/build
       - ../scripts:/app/scripts
     working_dir: /app
-    entrypoint: docker-entrypoint.sh
+    entrypoint: ['/bin/bash']
     command: sh ./scripts/run.sh
