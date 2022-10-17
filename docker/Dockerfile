@@ -16,6 +16,8 @@ VOLUME [ "./build" "./build" ]
 VOLUME [ "./scripts" "./scripts" ]
 VOLUME [ "./public" "./public" ]
 
+RUN ls ./public
+
 ENTRYPOINT [ "/bin/sh" ]
 
 RUN npm install
