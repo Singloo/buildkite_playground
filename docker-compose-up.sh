@@ -3,8 +3,8 @@ set -x
 docker-compose -f ./docker/docker-compose.prod.yml up
 # node ./scripts/logDir.js
 ls
-cd ./build
+cd ./public
 ls
-cd ../public
+cd ../src
 ls
 docker-compose -f ./docker/docker-compose.prod.yml down
