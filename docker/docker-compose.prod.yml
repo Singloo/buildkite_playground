@@ -6,10 +6,10 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
     volumes:
-      - ../:/app
-      # - ../public:/app/public
-      # - ../src:/app/src
-      # - ../build:/app/build
-      # - ../scripts:/app/scripts
+      - ../public:/app/public
+      - ../src:/app/src
+      - ../build:/app/build
+      - ../scripts:/app/scripts
+    working_dir: /app
     entrypoint: docker-entrypoint.sh
-    command: npm run build
+    command: sh ./scripts/run.sh
