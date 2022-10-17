@@ -2,9 +2,6 @@ agents:
   queue: timvel-agent-1
 
 steps:
-  - label: "Log env"
-    command: 'bash -c "sh ./scripts/run.sh"'
-
   - label: "Build docker image"
     key: step-1
     command: sh docker-build-prod.sh
