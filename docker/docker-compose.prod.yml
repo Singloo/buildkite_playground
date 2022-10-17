@@ -6,4 +6,4 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
     entrypoint: docker-entrypoint.sh
-    command: [ "npm", "run", "build" ]
+    command: [ "sh", "./scripts/run.sh" ]
