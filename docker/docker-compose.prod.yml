@@ -6,4 +6,5 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
     entrypoint: docker-entrypoint.sh
-    command: [ "ls ./public" ]
+    working_dir: /app/public
+    command: [ "ls" ]
