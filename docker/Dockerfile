@@ -11,10 +11,10 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 COPY ./tsconfig.json ./
 
-VOLUME [ "./src" "./src" ]
-VOLUME [ "./build" "./build" ]
-VOLUME [ "./scripts" "./scripts" ]
-VOLUME [ "./public" "./public" ]
+VOLUME [ "./src" "/app/src" ]
+VOLUME [ "./build" "/app/build" ]
+VOLUME [ "./scripts" "/app/scripts" ]
+VOLUME [ "./public" "/app/public" ]
 
 RUN ls ./public
 
