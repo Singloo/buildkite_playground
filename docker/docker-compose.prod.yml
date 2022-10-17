@@ -5,11 +5,5 @@ services:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
-    volumes:
-      - ../public:/app/public
-      - ../src:/app/src
-      - ../build:/app/build
-      - ../scripts:/app/scripts
-    working_dir: /app
     entrypoint: docker-entrypoint.sh
-    command: [ "ls", "&&", "cd ./public", "&&", "ls" ]
+    command: [ "npm", "run", "build" ]
