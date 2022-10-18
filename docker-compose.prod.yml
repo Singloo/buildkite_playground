@@ -9,7 +9,6 @@ services:
       - "./src:/app/src"
       - "./build:/app/build"
       - "./public:/app/public" 
-      - /var/lib/buildkite-agent/builds/timvel-agent-1/into-the-blue/playground/scripts:/app/scripts
     # entrypoint: docker-entrypoint.sh
     # command: [ "ls", "./public/" ]
     entrypoint: [ "tail", "-f", "/dev/null" ]
