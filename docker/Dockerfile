@@ -11,9 +11,4 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 COPY ./tsconfig.json ./
 
-VOLUME [ "./src" "/app/src" ]
-VOLUME [ "./build" "/app/build" ]
-VOLUME [ "./scripts" "/app/scripts" ]
-VOLUME [ "./public" "/app/public" ]
-
 RUN npm install
