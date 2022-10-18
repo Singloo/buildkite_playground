@@ -10,7 +10,7 @@ services:
       - ../build:/app/build
       - ../public:/app/public
       - ../scripts:/app/scripts
-      - ../.gitignore:/app
+      - ../.gitignore:/app/.gitignore
     # entrypoint: docker-entrypoint.sh
     # command: [ "ls", "./public/" ]
     entrypoint: [ "tail", "-f", "/dev/null" ]
