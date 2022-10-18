@@ -8,8 +8,8 @@ services:
     volumes:
       - "./src:/app/src"
       - "./build:/app/build"
-      - "./public:/app/public"
-      - "./scripts:/app/scripts"
+      - "./public:/app/public" 
+      - ./scripts:/app/scripts
     # entrypoint: docker-entrypoint.sh
     # command: [ "ls", "./public/" ]
     entrypoint: [ "tail", "-f", "/dev/null" ]
