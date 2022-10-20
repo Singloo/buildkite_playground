@@ -10,6 +10,6 @@ WORKDIR /app
 COPY ./package.json ./
 COPY ./package-lock.json ./
 COPY ./tsconfig.json ./
-COPY ./scripts ./scripts
+VOLUME [ "./scripts" "/app/scripts" ]
 
 RUN npm install
