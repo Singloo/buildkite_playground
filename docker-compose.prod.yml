@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     volumes:
-      - /buildkite/build/timvel-agent-1/into-the-blue/playground/src:/app/src
+      # - /buildkite/build/timvel-agent-1/into-the-blue/playground/src:/app/src
       - ./build:/app/build
       - /buildkite/shared/timvel-agent-1/into-the-blue/playground/public:/app/public
     # entrypoint: docker-entrypoint.sh
