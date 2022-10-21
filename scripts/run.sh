@@ -1,8 +1,3 @@
 # usr/bin/bash
-ls
-cd ./public
-ls
-cd ../src
-ls
-cd ..
-npm run build
+nvm --version
+node --version
