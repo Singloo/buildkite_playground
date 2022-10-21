@@ -7,8 +7,8 @@ services:
       dockerfile: ./docker/Dockerfile
     volumes:
       - ../src:/app/src
-      - "{$PWD}/build:/app/build"
-      - "{$PWD}/public:/app/public"
+      - "$PWD/build:/app/build"
+      - "$PWD/public:/app/public"
     # entrypoint: docker-entrypoint.sh
     # command: [ "ls", "./public/" ]
     entrypoint: [ "tail", "-f", "/dev/null" ]
