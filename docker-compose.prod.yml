@@ -6,9 +6,9 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     volumes:
-      - ./src:/app/src
+      - /buildkite/build/timvel-agent-1/into-the-blue/playground/src:/app/src
       - ./build:/app/build
-      - ./public:/app/public
+      - /buildkite/shared/timvel-agent-1/into-the-blue/playground/public:/app/public
     # entrypoint: docker-entrypoint.sh
     # command: [ "ls", "./public/" ]
     entrypoint: [ "tail", "-f", "/dev/null" ]
