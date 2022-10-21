@@ -13,6 +13,3 @@ steps:
     command: "sh docker-compose-up.sh"
 
   - wait
-
-  - label: "Log build dir"
-    command: node ./scripts/logDir.js
