@@ -1,5 +1,4 @@
 # usr/bin/bash
-pwd
 docker-compose -f ./docker/docker-compose.prod.yml up
-ls
+ls ./build
 docker-compose -f ./docker/docker-compose.prod.yml down
