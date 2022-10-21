@@ -3,14 +3,12 @@ services:
   web:
     image: playground/buildkite
     build:
-      context: ..
+      context: .
       dockerfile: ./docker/Dockerfile
     volumes:
-      - "${PWD}/src:/app/src"
-      - "./build:/app/build"
-      - "./public:/app/public/"
-      - "./scripts:/app/scripts"
-      - "../.gitignore:/app/.gitignore"
+      - ../src:/app/src
+      - ($pwd)/build:/app/build
+      - ($pwd)/public:/app/public
     # entrypoint: docker-entrypoint.sh
     # command: [ "ls", "./public/" ]
     entrypoint: [ "tail", "-f", "/dev/null" ]
