@@ -1,0 +1,13 @@
+echo "---- cleaning docker container ----"
+echo "${docker container prune -f}"
+
+echo "--- cleaning docker network ----"
+echo "${docker network prune -f}"
+
+
+echo "--- cleaning docker volume ----"
+echo "${docker volume prune -f}"
+
+
+echo "--- cleaning docker images without name ----"
+echo "${docker images | grep none | awk '{print $3}' | xargs docker rmi}"
