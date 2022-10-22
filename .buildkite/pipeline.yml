@@ -3,16 +3,19 @@ agents:
 
 steps:
   - label: "log Env"
-    command: 
-    - source ~/.bashrc
-    - sh ./scripts/run.sh
+    command:
+      - source ~/.bashrc
+      - sh ./scripts/run.sh
+    plugins:
+      - sv-oss/node-n#v0.1.2:
+          node-version: v16
 
   - label: "Build docker image"
     key: step-1
     command: sh docker-build-prod.sh
 
   - wait
-  
+
   - label: "Build web"
     key: step-2
     command: "sh docker-compose-up.sh"
