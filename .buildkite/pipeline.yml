@@ -13,9 +13,6 @@ steps:
     command: 
       - sh docker-compose-up.sh
       - node ./scripts/logDir.js
-    # plugins:
-    #   - sv-oss/node-n#v0.1.2:
-    #       node-version: v16
 
   - label: "Cleanup docker"
     command: 
