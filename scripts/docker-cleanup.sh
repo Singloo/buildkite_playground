@@ -14,4 +14,4 @@ docker volume prune -f
 
 echo "--- cleaning docker images without name ----"
 
-docker images | grep none | awk '{print $3}' | xargs docker rmi
+# docker images | grep none | awk '{print $3}' | xargs docker rmi
