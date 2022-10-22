@@ -5,7 +5,7 @@ const BUILD_DIR_PATH = path.resolve(__dirname, "..", "build");
 
 const loopDir = (pth) => {
   const fileStat = fs.statSync(pth);
-  if (fileStat.isDirectory) {
+  if (fileStat.isDirectory()) {
     const filenames = fs.readdirSync(pth);
     return filenames.map((filename) => loopDir(path.resolve(pth, filename)));
   }
