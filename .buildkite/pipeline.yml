@@ -17,7 +17,7 @@ steps:
           dockerfile: docker/node_modules.dockerfile
           context: ..
           max-age-days: 7
-          ecr-name: "${AWS_ECR_REPOSITORY_URI}/build-cache/${BUILDKITE_ORGANIZATION_SLUG}/${BUILDKITE_PIPELINE_SLUG}"
+          ecr-name: "${AWS_ECR_REPOSITORY_URI}"
           region: "${AWS_ECR_REGION}"
 
   - wait
