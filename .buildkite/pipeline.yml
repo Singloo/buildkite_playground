@@ -6,10 +6,10 @@ steps:
     plugins:
       - ecr#v2.7.0:
           login: true
-          account-ids: "603299253693"
-          region: "${AWS_ECR_REGION}"
-          assume_role:
-            role_arn: "arn:aws:iam::603299253693:user/pipeline_ecr_cache"
+          # account-ids: "603299253693"
+          # region: "${AWS_ECR_REGION}"
+          # assume_role:
+          #   role_arn: "arn:aws:iam::603299253693:user/pipeline_ecr_cache"
       - seek-oss/docker-ecr-cache#v2.0.0: # https://github.com/seek-oss/docker-ecr-cache-buildkite-plugin
           cache-on:
             - package.json # avoid cache hits on stale lockfiles
