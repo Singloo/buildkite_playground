@@ -4,8 +4,11 @@ ARG BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_TAG
 
 FROM ${BUILDKITE_PLUGIN_DOCKER_IMAGE} as modules
 
-# RUN apk update \
-#     && apk add --no-cache bash bash-doc bash-completion
+
+FROM node:16-alpine
+
+RUN apk update \
+    && apk add --no-cache bash bash-doc bash-completion
 
 RUN mkdir -p /app
 
