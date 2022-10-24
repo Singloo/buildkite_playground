@@ -5,6 +5,9 @@ services:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
+      args:
+        - BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_IMAGE=${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_IMAGE}
+        - BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_TAG=${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_TAG}
     volumes:
       - ../src:/app/src
       - ../build:/app/build

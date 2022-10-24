@@ -1,3 +1,9 @@
+ARG BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_IMAGE
+ARG BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_TAG
+
+FROM ${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_IMAGE}:${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_TAG} as modules
+
+
 FROM node:16-alpine
 
 RUN apk update \
@@ -11,4 +17,4 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 COPY ./tsconfig.json ./
 
-RUN npm install
+COPY --from=modules /app/node_modules /app/node_modules
