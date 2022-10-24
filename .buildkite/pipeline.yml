@@ -5,6 +5,7 @@ steps:
   - label: "Pull or install node modules"
     command:
       - echo "done"
+      - sh docker-build-prod.sh
     plugins:
       - ecr#v2.7.0:
           login: true
@@ -21,12 +22,6 @@ steps:
           max-age-days: 7
           ecr-name: "build-cache/${BUILDKITE_ORGANIZATION_SLUG}/${BUILDKITE_PIPELINE_SLUG}"
           region: "${AWS_ECR_REGION}"
-
-  - wait
-
-  - label: "Build docker image"
-    key: step-1
-    command: sh docker-build-prod.sh
 
   - wait
 
