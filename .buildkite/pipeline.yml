@@ -3,6 +3,8 @@ agents:
 
 steps:
   - label: "Pull or install node modules"
+    command:
+      - echo "done"
     plugins:
       - ecr#v2.7.0:
           login: true
@@ -15,7 +17,7 @@ steps:
             - package.json # avoid cache hits on stale lockfiles
             - package-lock.json
           dockerfile: docker/node_modules.dockerfile
-          context: '.'
+          context: "."
           max-age-days: 7
           ecr-name: "build-cache/${BUILDKITE_ORGANIZATION_SLUG}/${BUILDKITE_PIPELINE_SLUG}"
           region: "${AWS_ECR_REGION}"
