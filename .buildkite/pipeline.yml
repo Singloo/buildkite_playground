@@ -2,7 +2,7 @@ agents:
   queue: timvel-agent-1
 
 steps:
-  - label: "Pull or install node modules"
+  - label: "Build docker image"
     command:
       - echo "done"
       - sh docker-build-prod.sh
