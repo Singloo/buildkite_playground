@@ -7,7 +7,7 @@ steps:
       - echo "done"
       - sh docker-build-prod.sh
     plugins:
-      - ecr#v2.7.0:
+      - ecr#v2.7.0: # https://github.com/buildkite-plugins/ecr-buildkite-plugin
           login: true
           # account-ids: "603299253693"
           # region: "${AWS_ECR_REGION}"
