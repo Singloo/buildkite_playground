@@ -18,6 +18,7 @@ steps:
             - package.json # avoid cache hits on stale lockfiles
             - package-lock.json
           dockerfile: docker/node_modules.dockerfile
+          additional-build-args: '--network host'
           context: "."
           max-age-days: 7
           ecr-name: "build-cache/${BUILDKITE_ORGANIZATION_SLUG}/${BUILDKITE_PIPELINE_SLUG}"
