@@ -8,6 +8,7 @@ services:
       args:
         - BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_IMAGE=${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_IMAGE}
         - BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_TAG=${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_EXPORT_TAG}
+    network_mode: host
     volumes:
       - ../src:/app/src
       - ../build:/app/build
