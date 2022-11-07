@@ -22,19 +22,23 @@ export interface IXenoInjectedProps<Events extends TXenoMessage> {
   trigger: FuncWithEventNameHandler<Events>;
 }
 
-export type HandlerFunction<T extends TXenoMessage, EventName> = (
+export type RequiredObject<O> = O extends object
+  ? { [K in keyof O]-?: O[K] }
+  : O;
+
+export type HandlerFunction<T extends TXenoMessage, EventName = T["name"]> = (
   params: Extract<T, { name: EventName }>["payload"]
 ) => ObservableInput<unknown> | undefined | void;
 
 export type FuncWithEventNamePayload<T extends TXenoMessage> = <
-  E extends string
+  E extends T["name"]
 >(
   name: E,
   params: Extract<T, { name: E }>["payload"]
 ) => unknown;
 
 export type FuncWithEventNameHandler<T extends TXenoMessage> = <
-  E extends string
+  E extends T["name"]
 >(
   name: E,
   handler: HandlerFunction<T, E>
