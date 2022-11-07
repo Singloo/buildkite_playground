@@ -1,5 +1,5 @@
-import { ReplaySubject, of, from } from "rxjs";
-import { mergeMap, switchMap, take } from "rxjs/operators";
+import { ReplaySubject, of, from, Observable, firstValueFrom } from "rxjs";
+import { catchError, mergeMap, switchMap, take } from "rxjs/operators";
 import {
   TFutureTask,
   TXenoMessage,
@@ -50,7 +50,30 @@ class Handlers<Messages extends TXenoMessage> {
 
 export class Xeno<Messages extends TXenoMessage> {
   events: Map<Messages["name"], Handlers<Messages>> = new Map();
-  _futureEvents: Map<Messages["name"], TFutureTask> = new Map();
+  _futureEvents: Map<Messages["name"], TFutureTask<Messages["payload"]>> =
+    new Map();
+
+  reset = () => {
+    this.events = new Map();
+    this._futureEvents = new Map();
+  };
+
+  getEventsStatus = () => {
+    const keyValues: {
+      name: Messages["name"];
+      handlers: HandlerFunction<Messages>[];
+    }[] = [];
+    this.events.forEach((value, key) => {
+      keyValues.push({
+        name: key,
+        handlers: value.getHandlers(),
+      });
+    });
+    return {
+      total: this.events.size,
+      keyValues,
+    };
+  };
 
   _cleanFutureEvent = <K extends Messages["name"]>(name: K) => {
     // const task = this._futureEvents.get(name);
@@ -73,7 +96,8 @@ export class Xeno<Messages extends TXenoMessage> {
   };
   _executeFutureEvent: FuncWithEventNameHandler<Messages> = (name, handler) => {
     //only first listener will receive event
-    const task = this._futureEvents.get(name)!;
+    const task = this._futureEvents.get(name);
+    if (!task) return null;
     of(handler(task.params))
       .pipe(switchMap(toObservable))
       .subscribe({
@@ -94,12 +118,13 @@ export class Xeno<Messages extends TXenoMessage> {
     }
   };
 
-  on: FuncWithEventNameHandler<Messages> = (name, handler) => {
+  on: FuncWithEventNameHandler<Messages, () => void> = (name, handler) => {
     if (!this.events.get(name)) {
       this.events.set(name, new Handlers(name));
     }
     this._checkIfHasFutureEvent(name, handler);
-    const unlisten = this.events.get(name)!.addHandler(handler);
+    this.events.get(name)!.addHandler(handler);
+    const unlisten = () => this.events.delete(name);
     log("LISTENER", name, "TOTAL", this.events.get(name)!.numOfListeners);
 
     return unlisten;
@@ -111,7 +136,10 @@ export class Xeno<Messages extends TXenoMessage> {
    * @memberof Xeno3
    * implementation 2: each time create a new subject
    */
-  trigger: FuncWithEventNamePayload<Messages> = (name, params) => {
+  trigger: FuncWithEventNamePayload<Messages, Observable<any>> = (
+    name,
+    params
+  ) => {
     const handlerIns = this.events.get(name);
     const sub = new ReplaySubject<any>();
     if (!handlerIns || handlerIns.numOfListeners === 0) {
@@ -120,14 +148,16 @@ export class Xeno<Messages extends TXenoMessage> {
       this._addFutureEvent(sub, name, params);
       return sub.pipe(take(1));
     }
+    const handlers = handlerIns.getHandlers();
     // exist handlers
     from(
       // listeners are notified in this step
-      handlerIns.getHandlers().map((_handler) => _handler(params))
+      handlers.map((_handler) => _handler(params))
     )
       .pipe(
         // if senders want to know results, this line will be executed
-        mergeMap(toObservable)
+        mergeMap(toObservable),
+        catchError((err) => of({ error: err }))
       )
       .subscribe({
         next: (res) => {
@@ -136,7 +166,7 @@ export class Xeno<Messages extends TXenoMessage> {
           }
         },
       });
-    log("SENDER", name, "LISTENERS TRIGGERED", handlerIns.numOfListeners);
-    return sub.pipe(take(handlerIns.numOfListeners));
+    log("SENDER", name, "LISTENERS TRIGGERED", handlers.length);
+    return sub.pipe(take(handlers.length));
   };
 }
