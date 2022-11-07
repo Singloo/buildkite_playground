@@ -5,29 +5,26 @@ import {
   TXenoMessage,
   FuncWithEventNameHandler,
   FuncWithEventNamePayload,
+  HandlerFunction,
 } from "./type";
 import { map2Array, toObservable, isDev } from "./util";
 const log = (
   target: "LISTENER" | "SENDER",
   name: string | any,
-  ...args: any[]
+  ...args: unknown[]
 ) => {
   if (isDev) {
-    console.info(
-      `[${target}]`,
-      name,
-      `${new Date().toISOString()}`,
-      ...args
-    );
+    console.info(`[${target}]`, name, `${new Date().toISOString()}`, ...args);
   }
 };
-class Handlers {
-  _handlers: Map<Function, Function> = new Map();
+class Handlers<Messages extends TXenoMessage> {
+  _handlers: Map<HandlerFunction<Messages>, HandlerFunction<Messages>> =
+    new Map();
   _name: string;
   constructor(name: string) {
     this._name = name;
   }
-  addHandler = (handler: Function) => {
+  addHandler = (handler: HandlerFunction<Messages>) => {
     this._handlers.set(handler, handler);
     const removeListener = () => {
       if (!this._handlers.has(handler)) return;
@@ -52,31 +49,31 @@ class Handlers {
  */
 
 export class Xeno<Messages extends TXenoMessage> {
-  events: Map<string, Handlers> = new Map();
-  _futureEvents: Map<string, TFutureTask> = new Map();
+  events: Map<Messages["name"], Handlers<Messages>> = new Map();
+  _futureEvents: Map<Messages["name"], TFutureTask> = new Map();
 
   _cleanFutureEvent = <K extends Messages["name"]>(name: K) => {
     // const task = this._futureEvents.get(name);
     // if (!task?.subject.closed) task?.subject.unsubscribe();
-    this._futureEvents.delete(name as string);
+    this._futureEvents.delete(name);
   };
-  _addFutureEvent = (
+  _addFutureEvent = <E extends Messages["name"]>(
     subject: ReplaySubject<any>,
-    name: Messages["name"],
-    params?: Messages["payload"]
+    name: E,
+    params: Extract<Messages, { name: E }>["payload"]
   ) => {
-    if (this._futureEvents.has(name as string)) {
+    if (this._futureEvents.has(name)) {
       // already existed a future event, will replace the old one
       this._cleanFutureEvent(name);
     }
-    this._futureEvents.set(name as string, {
+    this._futureEvents.set(name, {
       params,
       subject,
     });
   };
   _executeFutureEvent: FuncWithEventNameHandler<Messages> = (name, handler) => {
     //only first listener will receive event
-    const task = this._futureEvents.get(name as string)!;
+    const task = this._futureEvents.get(name)!;
     of(handler(task.params))
       .pipe(switchMap(toObservable))
       .subscribe({
@@ -91,24 +88,19 @@ export class Xeno<Messages extends TXenoMessage> {
     name,
     handler
   ) => {
-    if (this._futureEvents.has(name as string)) {
+    if (this._futureEvents.has(name)) {
       log("LISTENER", name, "FUTURE TASK TRIGGERED");
       this._executeFutureEvent(name, handler);
     }
   };
 
   on: FuncWithEventNameHandler<Messages> = (name, handler) => {
-    if (!this.events.get(name as string)) {
-      this.events.set(name as string, new Handlers(name as string));
+    if (!this.events.get(name)) {
+      this.events.set(name, new Handlers(name));
     }
     this._checkIfHasFutureEvent(name, handler);
-    const unlisten = this.events.get(name as string)!.addHandler(handler);
-    log(
-      "LISTENER",
-      name,
-      "TOTAL",
-      this.events.get(name as string)!.numOfListeners
-    );
+    const unlisten = this.events.get(name)!.addHandler(handler);
+    log("LISTENER", name, "TOTAL", this.events.get(name)!.numOfListeners);
 
     return unlisten;
   };
