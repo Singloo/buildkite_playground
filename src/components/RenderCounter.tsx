@@ -10,7 +10,7 @@ export const RenderCounter = () => {
   );
 
   return (
-    <div>
+    <div className={"underline"}>
       {"Rendered: " + renderTimes.current}
       {/* <div style={{ maxHeight: 200, overflowY: "auto" }}>
         {renderedAt.current.map((txt) => (
