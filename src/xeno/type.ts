@@ -23,8 +23,8 @@ export type IReactComponent<P = any> =
   | React.ForwardRefExoticComponent<P>;
 
 export interface IXenoInjectedProps<Events extends TXenoMessage> {
-  on: FuncWithEventNameHandler<Events>;
-  trigger: FuncWithEventNamePayload<Events>;
+  on: XenoListener<Events>;
+  trigger: XenoEmitter<Events>;
 }
 
 export type RequiredObject<O> = Record<
@@ -38,7 +38,7 @@ export type HandlerFunction<T extends TXenoMessage, EventName = T["name"]> = (
   params: Extract<T, { name: EventName }>["payload"]
 ) => ObservableInput<unknown> | undefined | void;
 
-export type FuncWithEventNamePayload<
+export type XenoEmitter<
   T extends TXenoMessage,
   Return = unknown
 > = <E extends T["name"]>(
@@ -46,7 +46,7 @@ export type FuncWithEventNamePayload<
   params: Extract<T, { name: E }>["payload"]
 ) => Return;
 
-export type FuncWithEventNameHandler<
+export type XenoListener<
   T extends TXenoMessage,
   Return = unknown
 > = <E extends T["name"]>(name: E, handler: HandlerFunction<T, E>) => Return;

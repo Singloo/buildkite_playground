@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { constructContext } from "./context";
+import { RenderCounter } from "../components/RenderCounter";
 
 const { withContextProvider, useMyContext } = constructContext();
 
@@ -12,6 +13,7 @@ const Comp1 = () => {
   }, [state.count1]);
   return (
     <div>
+      <RenderCounter />
       <div>{"Count1 " + count1}</div>
       <button
         onClick={() =>

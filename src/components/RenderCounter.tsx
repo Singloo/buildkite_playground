@@ -1,0 +1,22 @@
+import { useRef } from "react";
+
+export const RenderCounter = () => {
+  const renderTimes = useRef(0);
+  const renderedAt = useRef<string[]>([]);
+
+  renderTimes.current += 1;
+  renderedAt.current.push(
+    `[${renderTimes.current}]: ${new Date().toISOString()}`
+  );
+
+  return (
+    <div>
+      {"Rendered: " + renderTimes.current}
+      {/* <div style={{ maxHeight: 200, overflowY: "auto" }}>
+        {renderedAt.current.map((txt) => (
+          <div key={txt}>{txt}</div>
+        ))}
+      </div> */}
+    </div>
+  );
+};
