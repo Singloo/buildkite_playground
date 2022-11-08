@@ -3,8 +3,8 @@ import { catchError, mergeMap, switchMap, take } from "rxjs/operators";
 import {
   TFutureTask,
   TXenoMessage,
-  FuncWithEventNameHandler,
-  FuncWithEventNamePayload,
+  XenoListener,
+  XenoEmitter,
   HandlerFunction,
 } from "./type";
 import { map2Array, toObservable, isDev } from "./util";
@@ -94,7 +94,7 @@ export class Xeno<Messages extends TXenoMessage> {
       subject,
     });
   };
-  _executeFutureEvent: FuncWithEventNameHandler<Messages> = (name, handler) => {
+  _executeFutureEvent: XenoListener<Messages> = (name, handler) => {
     //only first listener will receive event
     const task = this._futureEvents.get(name);
     if (!task) return null;
@@ -108,7 +108,7 @@ export class Xeno<Messages extends TXenoMessage> {
       });
   };
 
-  _checkIfHasFutureEvent: FuncWithEventNameHandler<Messages> = (
+  _checkIfHasFutureEvent: XenoListener<Messages> = (
     name,
     handler
   ) => {
@@ -118,7 +118,7 @@ export class Xeno<Messages extends TXenoMessage> {
     }
   };
 
-  on: FuncWithEventNameHandler<Messages, () => void> = (name, handler) => {
+  on: XenoListener<Messages, () => void> = (name, handler) => {
     if (!this.events.get(name)) {
       this.events.set(name, new Handlers(name));
     }
@@ -136,7 +136,7 @@ export class Xeno<Messages extends TXenoMessage> {
    * @memberof Xeno3
    * implementation 2: each time create a new subject
    */
-  trigger: FuncWithEventNamePayload<Messages, Observable<any>> = (
+  trigger: XenoEmitter<Messages, Observable<any>> = (
     name,
     params
   ) => {
