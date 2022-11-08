@@ -23,8 +23,8 @@ export type IReactComponent<P = any> =
   | React.ForwardRefExoticComponent<P>;
 
 export interface IXenoInjectedProps<Events extends TXenoMessage> {
-  on: FuncWithEventNamePayload<Events>;
-  trigger: FuncWithEventNameHandler<Events>;
+  on: FuncWithEventNameHandler<Events>;
+  trigger: FuncWithEventNamePayload<Events>;
 }
 
 export type RequiredObject<O> = Record<
