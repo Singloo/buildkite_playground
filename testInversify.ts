@@ -1,21 +1,25 @@
-import 'reflect-metadata';
-import { Container, injectable } from 'inversify';
+import "reflect-metadata";
+import { Container, injectable } from "inversify";
 
-const CLASS_SYMBOL = Symbol('classSymbol');
-const container = new Container();
+const CLASS_SYMBOL = Symbol("classSymbol");
+export const container = new Container();
 
 type ClassLike<T> = new (...args: any[]) => T;
 
-const Injectable = (name?: string, singleton?: boolean) => {
+export const Injectable = (name?: string, singleton?: boolean) => {
   return (target: ClassLike<any>) => {
+    const res = injectable()(target);
     let classIdentifier = Symbol.for(target.name);
-    if (typeof name !== 'undefined') {
+    if (typeof name !== "undefined") {
       classIdentifier = Symbol(name);
       Reflect.defineMetadata(CLASS_SYMBOL, classIdentifier, target);
     }
     const bind = container.bind<typeof target>(classIdentifier).to(target);
-    if (singleton) bind.inSingletonScope();
-    injectable()(target);
+    if (singleton) {
+      console.log("[Injectable] [singleton]", target);
+      bind.inSingletonScope();
+    }
+    return res;
   };
 };
 
@@ -24,9 +28,14 @@ const getClassSymbol = (target: ClassLike<any>) => {
   return storedSymbol ?? Symbol.for(target.name);
 };
 
-const resolve = <T extends any>(target: ClassLike<T>) => {
-  const paramTypes = Reflect.getMetadata('design:paramtypes', target);
-  if (!paramTypes) return container.resolve(target);
-  const args: any[] = (paramTypes as any[]).map((_target) => resolve(_target));
+export const resolve = <T extends any>(target: ClassLike<T>): T => {
+  const paramTypes = Reflect.getMetadata("design:paramtypes", target);
+  const identifier = getClassSymbol(target);
+  if (!paramTypes) return container.get(identifier);
+  const args: any[] = (paramTypes as any[]).map(resolve);
   return new target(...args);
+};
+
+export const Instantiable = () => {
+  return (target: ClassLike<any>) => {};
 };
