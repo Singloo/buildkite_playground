@@ -1,9 +1,6 @@
-import { Injectable, resolve, Instantiable } from "./testInversify";
+import { Injectable, resolve, Instantiable, container } from "./testInversify";
 import { makeObservable, observable, action } from "mobx";
-// import { Container } from "inversify";
-
-// const container2 = new Container({ autoBindInjectable: true });
-@Injectable(undefined, true)
+@Injectable({ singleton: true })
 class Store1 {
   constructor() {
     makeObservable(this, {
