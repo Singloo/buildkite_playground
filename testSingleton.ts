@@ -3,7 +3,7 @@ import { Container, injectable, inject } from "inversify";
 import { makeObservable, observable, action } from "mobx";
 import { ClassLike, Injectable, container, resolve } from "./testInversify";
 
-@Injectable(undefined, true)
+@Injectable({ singleton: true })
 class Store1 {
   constructor() {
     makeObservable(this, {
