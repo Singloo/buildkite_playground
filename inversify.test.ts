@@ -1,5 +1,10 @@
 import { Injectable, resolve, Instantiable, container } from "./testInversify";
 import { makeObservable, observable, action } from "mobx";
+
+interface IStore1 {
+  count: number;
+  increase: () => void;
+}
 @Injectable({ singleton: true })
 class Store1 {
   constructor() {
@@ -31,7 +36,10 @@ class Store2 {
 
 @Injectable()
 class Service1 {
-  constructor(private store1: Store1) {}
+  store1: Store1;
+  constructor(store1: Store1) {
+    this.store1 = store1;
+  }
 
   invoke = () => {
     this.store1.increase();
