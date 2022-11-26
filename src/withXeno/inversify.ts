@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { Container, injectable } from "inversify";
 
 const CLASS_SYMBOL = Symbol("classSymbol");
@@ -39,16 +38,44 @@ const getClassSymbol = (target: ClassLike<any>) => {
   return storedSymbol ?? Symbol.for(target.name);
 };
 
-export const resolve = <T extends any>(target: ClassLike<T>): T => {
-  const paramTypes = Reflect.getMetadata("design:paramtypes", target);
+export const checkIfContainsCircleDeps = (
+  chain: ClassLike<any>[],
+  nowResolving: ClassLike<any>
+) => {
+  const hasBeenRequired = chain.some(
+    (c) => c.prototype === nowResolving.prototype
+  );
+  return hasBeenRequired;
+};
+
+export const resolve = <T extends any>(
+  target: ClassLike<T>,
+  targetsChain: ClassLike<any>[] = []
+): T => {
+  console.log(
+    "hasCircleDeps",
+    {
+      target,
+      targetsChain,
+    },
+    checkIfContainsCircleDeps(targetsChain, target)
+  );
   const identifier = getClassSymbol(target);
+  const paramTypes = Reflect.getMetadata("design:paramtypes", target);
+  console.log({
+    target,
+    paramTypes,
+    targetsChain,
+  });
   if (!paramTypes?.length) {
-    if (container.isBound(identifier)) {
-      return container.get(identifier);
-    }
+    const isBound = container.isBound(identifier);
+    if (isBound) return container.get(identifier);
     return new target();
   }
-  const args: any[] = (paramTypes as any[]).map(resolve);
+
+  const args: any[] = (paramTypes as any[]).map((tgt) =>
+    resolve(tgt, [...targetsChain, target])
+  );
   return new target(...args);
 };
 
