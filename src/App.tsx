@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import "reflect-metadata";
 import "./App.css";
 import PureContextApp from "./pureContext";
 function App() {
