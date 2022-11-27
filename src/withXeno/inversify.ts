@@ -47,25 +47,24 @@ export const checkIfContainsCircleDeps = (
 const isClass = (target: new (...args: any[]) => any) => {
   return typeof target === 'function' && /^class\s/.test(target.prototype.constructor.toString());
 };
-export const resolve = <T extends any>(
-  target: ClassLike<T>,
-  targetsChain: ClassLike<any>[] = [],
-): T => {
+export const resolve = <T extends any>(target: ClassLike<T>): T => {
   if (!isClass(target)) throw new Error('Invalid target, expect Class');
   const identifier = getClassSymbol(target);
   const paramTypes = Reflect.getMetadata('design:paramtypes', target);
+  console.warn({
+    target,
+    paramTypes,
+  });
   if (!paramTypes?.length) {
     const isBound = container.isBound(identifier);
     if (isBound) return container.get(identifier);
     return new target();
   }
 
-  const args: any[] = (paramTypes as any[]).map((tgt) => resolve(tgt, [...targetsChain, target]));
+  const args: any[] = (paramTypes as any[]).map(resolve);
   return new target(...args);
 };
 
 export const Instantiable = () => {
-  return (target: ClassLike<any>) => {
-    return Injectable()(target);
-  };
+  return (target: ClassLike<any>) => {};
 };

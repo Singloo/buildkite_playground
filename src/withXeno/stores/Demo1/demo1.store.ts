@@ -6,7 +6,9 @@ export class Demo1Store {
   constructor() {
     makeObservable(this, {
       position: observable,
+      count: observable,
       setPosition: action,
+      increase: action,
     });
   }
 
@@ -17,7 +19,14 @@ export class Demo1Store {
     y2: 0,
   };
 
+  count = 0;
+
   setPosition = (position: { x1: number; x2: number; y1: number; y2: number }) => {
     this.position = position;
+  };
+
+  increase = () => {
+    console.warn('Store increase', this.count);
+    this.count += 1;
   };
 }

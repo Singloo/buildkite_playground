@@ -14,4 +14,9 @@ export class Demo1Controller extends BaseController {
   componentWillUnmount(): void {
     super.componentWillUnmount();
   }
+
+  onClickIncrease = () => {
+    console.warn('Controller increase');
+    this.service.increase();
+  };
 }
