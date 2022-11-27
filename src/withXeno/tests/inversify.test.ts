@@ -67,9 +67,15 @@ test('Resolve', () => {
 });
 
 test('Resolve 2 layer', () => {
+  class BaseController {
+    method1() {}
+    mehod2() {}
+  }
   @Instantiable()
-  class Controller1 {
-    constructor(private service1: Service1, private service2: Service2) {}
+  class Controller1 extends BaseController {
+    constructor(private service1: Service1, private service2: Service2) {
+      super();
+    }
     invoke1 = () => {
       this.service1.invoke();
     };
