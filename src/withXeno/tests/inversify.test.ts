@@ -1,7 +1,6 @@
-import "reflect-metadata";
-import { Injectable, resolve, Instantiable, container } from "../inversify";
-import { makeObservable, observable, action } from "mobx";
-import { RStore3 } from "./Store3";
+import 'reflect-metadata';
+import { Injectable, resolve, Instantiable, container } from '../inversify';
+import { makeObservable, observable, action } from 'mobx';
 
 @Injectable({ singleton: true })
 class Store1 {
@@ -41,7 +40,7 @@ class Service1 {
 
   invoke = () => {
     this.store1.increase();
-    console.log("[Service1]", this.store1.count);
+    console.log('[Service1]', this.store1.count);
   };
   get getCount() {
     return this.store1.count;
@@ -53,48 +52,50 @@ class Service2 {
   constructor(private store2: Store2) {}
   invoke = () => {
     this.store2.increase2();
-    console.log("[Service2]", this.store2.count2);
+    console.log('[Service2]', this.store2.count2);
   };
   get getCount() {
     return this.store2.count2;
   }
 }
 
-// test("Resolve", () => {
-//   const instance = resolve(Service1);
-//   expect(instance instanceof Service1).toBe(true);
-//   instance.invoke();
-//   expect(instance.getCount).toBe(1);
-// });
-
-// test("Resolve 2 layer", () => {
-//   @Instantiable()
-//   class Controller1 {
-//     constructor(private service1: Service1, private service2: Service2) {}
-//     invoke1 = () => {
-//       this.service1.invoke();
-//     };
-//     invoke2 = () => {
-//       this.service2.invoke();
-//     };
-//     get service1Count() {
-//       return this.service1.getCount;
-//     }
-//     get service2Count() {
-//       return this.service2.getCount;
-//     }
-//   }
-//   const instance = resolve(Controller1);
-//   expect(instance instanceof Controller1).toBeTruthy();
-//   instance.invoke1();
-//   instance.invoke2();
-//   expect(instance.service1Count).toBe(2);
-//   expect(instance.service2Count).toBe(2);
-// });
-
-test("Circle require", () => {
-  const store3 = resolve(RStore3);
-  expect(store3 instanceof RStore3).toBeTruthy();
+test('Resolve', () => {
+  const instance = resolve(Service1);
+  expect(instance instanceof Service1).toBe(true);
+  instance.invoke();
+  expect(instance.getCount).toBe(1);
 });
 
-test("Instance registration", () => {});
+test('Resolve 2 layer', () => {
+  @Instantiable()
+  class Controller1 {
+    constructor(private service1: Service1, private service2: Service2) {}
+    invoke1 = () => {
+      this.service1.invoke();
+    };
+    invoke2 = () => {
+      this.service2.invoke();
+    };
+    get service1Count() {
+      return this.service1.getCount;
+    }
+    get service2Count() {
+      return this.service2.getCount;
+    }
+  }
+  const instance = resolve(Controller1);
+  expect(instance instanceof Controller1).toBeTruthy();
+  instance.invoke1();
+  instance.invoke2();
+  expect(instance.service1Count).toBe(2);
+  expect(instance.service2Count).toBe(2);
+});
+
+test('Constant registration', () => {
+  const obj = {
+    a: 'a',
+  };
+  container.bind<typeof obj>('constant').toConstantValue(obj);
+  const res = container.get<typeof obj>('constant');
+  expect(res.a).toBe('a');
+});

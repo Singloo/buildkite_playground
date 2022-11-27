@@ -1,5 +1,5 @@
-import { Injectable } from "../inversify";
-import { RStore3 } from "./Store3";
+import { Injectable } from '../inversify';
+import { RStore3 } from './Store3';
 
 @Injectable({ singleton: true })
 export class RStore2 {

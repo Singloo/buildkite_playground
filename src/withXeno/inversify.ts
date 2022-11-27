@@ -1,6 +1,6 @@
-import { Container, injectable } from "inversify";
+import { Container, injectable } from 'inversify';
 
-const CLASS_SYMBOL = Symbol("classSymbol");
+const CLASS_SYMBOL = Symbol('classSymbol');
 export const container = new Container();
 
 const USE_SYMBOL_AS_IDENTIFIER = false;
@@ -14,14 +14,12 @@ export const Injectable = (
   { name, singleton }: InjectableConfig = {
     name: undefined,
     singleton: undefined,
-  }
+  },
 ) => {
   return (target: ClassLike<any>) => {
     const res = injectable()(target);
-    let classIdentifier = USE_SYMBOL_AS_IDENTIFIER
-      ? Symbol.for(target.name)
-      : target;
-    if (typeof name !== "undefined" && USE_SYMBOL_AS_IDENTIFIER) {
+    let classIdentifier = USE_SYMBOL_AS_IDENTIFIER ? Symbol.for(target.name) : target;
+    if (typeof name !== 'undefined' && USE_SYMBOL_AS_IDENTIFIER) {
       classIdentifier = Symbol(name);
       Reflect.defineMetadata(CLASS_SYMBOL, classIdentifier, target);
     }
@@ -40,31 +38,32 @@ const getClassSymbol = (target: ClassLike<any>) => {
 
 export const checkIfContainsCircleDeps = (
   chain: ClassLike<any>[],
-  nowResolving: ClassLike<any>
+  nowResolving: ClassLike<any>,
 ) => {
-  const hasBeenRequired = chain.some(
-    (c) => c.prototype === nowResolving.prototype
-  );
+  const hasBeenRequired = chain.some((c) => c === nowResolving);
   return hasBeenRequired;
 };
 
+const isClass = (target: new (...args: any[]) => any) => {
+  return typeof target === 'function' && /^class\s/.test(target.prototype.constructor.toString());
+};
 export const resolve = <T extends any>(
   target: ClassLike<T>,
-  targetsChain: ClassLike<any>[] = []
+  targetsChain: ClassLike<any>[] = [],
 ): T => {
-  console.log(
-    "hasCircleDeps",
-    {
-      target,
-      targetsChain,
-    },
-    checkIfContainsCircleDeps(targetsChain, target)
-  );
+  if (!isClass(target)) throw new Error('Invalid target, expect Class');
+  console.log('hasCircleDeps', {
+    target,
+    targetsChain,
+    constructor: target.constructor,
+  });
+  console.log('hasCircleDeps', checkIfContainsCircleDeps(targetsChain, target));
   const identifier = getClassSymbol(target);
-  const paramTypes = Reflect.getMetadata("design:paramtypes", target);
+  const paramTypes = Reflect.getMetadata('design:paramtypes', target);
   console.log({
     target,
     paramTypes,
+    paramTypesLength: paramTypes.length,
     targetsChain,
   });
   if (!paramTypes?.length) {
@@ -73,9 +72,7 @@ export const resolve = <T extends any>(
     return new target();
   }
 
-  const args: any[] = (paramTypes as any[]).map((tgt) =>
-    resolve(tgt, [...targetsChain, target])
-  );
+  const args: any[] = (paramTypes as any[]).map((tgt) => resolve(tgt, [...targetsChain, target]));
   return new target(...args);
 };
 
