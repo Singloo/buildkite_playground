@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@abraham/reflection@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@abraham/reflection/-/reflection-0.11.0.tgz#12dc627b8b719c5d102c3052b5648e56985dbb3f"
+  integrity sha512-lCPIgtjeiZ7ZWLPP5RiAmGAyw5I0dHMt0GzzKZVZiZ48lNC0sGnmTzKITEtOlZevylf0sf5vjhbEmByuQMQE9Q==
+
 "@adobe/css-tools@^4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.0.1.tgz#b38b444ad3aa5fedbb15f2f746dcd934226a12dd"
