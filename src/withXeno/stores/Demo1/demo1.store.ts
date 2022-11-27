@@ -1,5 +1,5 @@
-import { Injectable } from "@/withXeno/inversify";
-import { observable, action, makeObservable } from "mobx";
+import { Injectable } from 'src/withXeno/inversify';
+import { observable, action, makeObservable } from 'mobx';
 
 @Injectable({ singleton: true })
 export class Demo1Store {
@@ -17,12 +17,7 @@ export class Demo1Store {
     y2: 0,
   };
 
-  setPosition = (position: {
-    x1: number;
-    x2: number;
-    y1: number;
-    y2: number;
-  }) => {
+  setPosition = (position: { x1: number; x2: number; y1: number; y2: number }) => {
     this.position = position;
   };
 }
