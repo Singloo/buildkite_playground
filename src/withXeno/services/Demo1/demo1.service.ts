@@ -1,5 +1,5 @@
-import { Injectable } from "@/withXeno/inversify";
-import { Demo1Store } from "@/withXeno/stores/Demo1/demo1.store";
+import { Injectable } from "src/withXeno/inversify";
+import { Demo1Store } from "src/withXeno/stores/Demo1/demo1.store";
 
 @Injectable()
 export class Demo1Service {

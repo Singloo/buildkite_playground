@@ -52,20 +52,8 @@ export const resolve = <T extends any>(
   targetsChain: ClassLike<any>[] = [],
 ): T => {
   if (!isClass(target)) throw new Error('Invalid target, expect Class');
-  console.log('hasCircleDeps', {
-    target,
-    targetsChain,
-    constructor: target.constructor,
-  });
-  console.log('hasCircleDeps', checkIfContainsCircleDeps(targetsChain, target));
   const identifier = getClassSymbol(target);
   const paramTypes = Reflect.getMetadata('design:paramtypes', target);
-  console.log({
-    target,
-    paramTypes,
-    paramTypesLength: paramTypes.length,
-    targetsChain,
-  });
   if (!paramTypes?.length) {
     const isBound = container.isBound(identifier);
     if (isBound) return container.get(identifier);
