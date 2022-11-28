@@ -64,7 +64,7 @@ const Comp3 = () => {
 
 function App() {
   return (
-    <div>
+    <div className={"mx-auto"}>
       <Comp1 />
       <Comp2 />
       <Comp3 />
