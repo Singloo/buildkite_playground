@@ -1,5 +1,5 @@
 import { Demo1Store } from "src/withXeno/stores/Demo1/demo1.store";
-import { Demo1Controller } from "../demo1.controller";
+import { Demo1Controller } from "../controller";
 import { Button2 } from "src/components";
 import { MovingBox } from "./style";
 import { Box } from "../components";
@@ -19,7 +19,7 @@ export const Demo1 = (props: Demo1Props) => {
       {new Array(10).fill(1).map((_, idx) => (
         <Box key={"box" + idx} idx={idx} />
       ))}
-      <MovingBox />
+      <MovingBox id={"movingline"} />
     </div>
   );
 };
