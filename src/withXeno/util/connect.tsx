@@ -1,7 +1,7 @@
 import { BaseController } from "src/types";
 import { ClassLike, resolve } from "src/withXeno/inversify";
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
 export const connectStores =
   <
     C extends BaseController,
@@ -28,6 +28,10 @@ export const connectStores =
         ...props,
         ...compProps,
       } as P;
+      useEffect(() => {
+        compProps.controller?.componentDidMount();
+        return () => compProps.controller?.componentWillUnmount();
+      }, []);
       return <Comp {..._props} />;
     }
     Enhanced.displayName =
