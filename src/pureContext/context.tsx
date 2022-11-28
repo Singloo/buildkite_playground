@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useMemo, useReducer } from "react";
 
 const INITIAL_STATE: IState = {
   count1: 0,
@@ -17,7 +17,7 @@ const reducer = (
   action: {
     type: string;
     payload: Partial<IState>;
-  },
+  }
 ) => {
   switch (action.type) {
     default:
@@ -44,18 +44,14 @@ export const constructContext = () => {
         type: string;
         payload: Partial<IState>;
       }>;
-    },
+    }
   );
-  const withContextProvider = <P extends object>(Comp: React.ComponentType<P>) => {
+  const withContextProvider = <P extends object>(
+    Comp: React.ComponentType<P>
+  ) => {
     const Enhanced = (props: P) => {
       const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-      useEffect(() => {
-        console.warn('dispatch update');
-      }, [dispatch]);
-      const count1 = useMemo(() => 'Count1' + state.count1, [state.count1]);
-      useEffect(() => {
-        console.warn('State change');
-      }, [state]);
+      const count1 = useMemo(() => "Count1" + state.count1, [state.count1]);
       return (
         <context.Provider value={{ state, dispatch, count1 }}>
           <Comp {...props} />
@@ -68,14 +64,17 @@ export const constructContext = () => {
   const useMyContext = () => useContext(context);
   const withContextConsumer = <P extends object, K extends keyof IState>(
     observes: K[],
-    Comp: React.ComponentType<P>,
+    Comp: React.ComponentType<P>
   ): React.ComponentType<P & Pick<IState, K>> => {
     const Enhanced = (props: P & Pick<IState, K>) => {
       const { state } = useMyContext();
       const selectedState: Pick<IState, K> = observes
         .map((key) => ({ [key]: state[key] }))
         .reduce((prev, curr) => ({ ...prev, ...curr }), {}) as Pick<IState, K>;
-      const memoed = useMemo(() => <Comp {...props} {...selectedState} />, [props, selectedState]);
+      const memoed = useMemo(
+        () => <Comp {...props} {...selectedState} />,
+        [props, selectedState]
+      );
       return memoed;
     };
     return Enhanced;

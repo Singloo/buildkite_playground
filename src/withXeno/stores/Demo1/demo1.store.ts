@@ -26,7 +26,6 @@ export class Demo1Store {
   };
 
   increase = () => {
-    console.warn('Store increase', this.count);
     this.count += 1;
   };
 }
