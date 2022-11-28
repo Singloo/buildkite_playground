@@ -1,7 +1,7 @@
 import { Injectable } from 'src/withXeno/inversify';
 import { observable, action, makeObservable } from 'mobx';
 
-@Injectable({ singleton: true })
+@Injectable({ singleton: false })
 export class Demo1Store {
   constructor() {
     makeObservable(this, {
