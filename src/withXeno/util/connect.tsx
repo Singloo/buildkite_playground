@@ -30,5 +30,9 @@ export const connectStores =
       } as P;
       return <Comp {..._props} />;
     }
+    Enhanced.displayName =
+      `connected-with-${controller?.name ?? ""}-${Object.values(stores)
+        .map((o) => o.name)
+        .join("-")}` + Comp.displayName;
     return observer(Enhanced);
   };
