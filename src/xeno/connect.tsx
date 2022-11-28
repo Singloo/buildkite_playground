@@ -1,19 +1,21 @@
 import { useEffect, useRef } from "react";
 import { Xeno } from "./xeno";
-import {
-  IReactComponent,
-  TXenoMessage,
-  XenoListener,
-} from "./type";
+import { TXenoMessage, XenoEmitter, XenoListener } from "./type";
+import React from "react";
+import { Observable } from "rxjs";
 export const connectXeno =
   <T extends TXenoMessage>(xeno: Xeno<T>) =>
-  (Comp: IReactComponent<any>) => {
-    const EnhancedComp = (props: any) => {
+  <
+    P extends {
+      on: XenoListener<T, () => void>;
+      trigger: XenoEmitter<T, Observable<any>>;
+    } & JSX.IntrinsicAttributes
+  >(
+    Comp: React.ComponentType<P>
+  ) => {
+    const EnhancedComp = (props: Omit<P, "on" | "trigger">) => {
       const unlistens = useRef<Function[]>([]);
-      const on: XenoListener<T, () => void> = (
-        eventName,
-        handler
-      ) => {
+      const on: XenoListener<T, () => void> = (eventName, handler) => {
         const unlisten = xeno.on(eventName, handler);
         unlistens.current.push(unlisten);
         return unlisten;
@@ -24,8 +26,12 @@ export const connectXeno =
         };
         return cleanListeners;
       }, []);
-
-      return <Comp {...props} on={on} trigger={xeno.trigger} />;
+      const _props = {
+        ...props,
+        on,
+        trigger: xeno.trigger,
+      } as P;
+      return <Comp {..._props} />;
     };
     EnhancedComp.displayName = "Xeno-connected-" + Comp.displayName;
     return EnhancedComp;
