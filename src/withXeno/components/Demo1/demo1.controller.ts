@@ -16,7 +16,6 @@ export class Demo1Controller extends BaseController {
   }
 
   onClickIncrease = () => {
-    console.warn('Controller increase');
     this.service.increase();
   };
 }

@@ -6,7 +6,6 @@ export class Demo1Service {
   constructor(private demo1Store: Demo1Store) {}
 
   increase = () => {
-    console.warn('Service increase');
     this.demo1Store.increase();
   };
 }

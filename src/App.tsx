@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import './App.css';
 import PureContextApp from './pureContext';
 import { Demo1 } from './withXeno/components';

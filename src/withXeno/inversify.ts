@@ -51,10 +51,6 @@ export const resolve = <T extends any>(target: ClassLike<T>): T => {
   if (!isClass(target)) throw new Error('Invalid target, expect Class');
   const identifier = getClassSymbol(target);
   const paramTypes = Reflect.getMetadata('design:paramtypes', target);
-  console.warn({
-    target,
-    paramTypes,
-  });
   if (!paramTypes?.length) {
     const isBound = container.isBound(identifier);
     if (isBound) return container.get(identifier);
