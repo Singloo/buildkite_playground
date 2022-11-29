@@ -13,4 +13,8 @@ export class BoxController extends BaseController {
   setElmPosition = (elmId: string) => {
     this.service.getAndSetElmPosition(elmId);
   };
+
+  getElmPosition = (elmId: string) => {
+    return this.service.getElmPosition(elmId);
+  };
 }

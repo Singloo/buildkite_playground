@@ -3,7 +3,7 @@ import { Demo1Controller } from "../controller";
 import { Button2 } from "src/components";
 import { MovingBox } from "./style";
 import { Box } from "../components";
-
+import { useEffect, useState } from "react";
 type Demo1Props = {
   controller: Demo1Controller;
   demo1Store: Demo1Store;
@@ -12,14 +12,20 @@ type Demo1Props = {
 
 export const Demo1 = (props: Demo1Props) => {
   const { demo1Store, controller } = props;
+  const [run, setRun] = useState(true);
+  useEffect(() => {
+    const obsr = controller.startBoradcastPosition("movingline");
+    const sub = obsr.subscribe(() => {});
+
+    return () => sub.unsubscribe();
+  }, [controller]);
   return (
-    <div
-      className={"flex flex-col flex-1 items-center border-violet-500 border"}
-    >
+    <div>
+      <Button2 onClick={() => setRun(!run)}>{run ? "Stop" : "Start"}</Button2>
       {new Array(10).fill(1).map((_, idx) => (
         <Box key={"box" + idx} idx={idx} />
       ))}
-      <MovingBox id={"movingline"} />
+      <MovingBox $run={run} id={"movingline"} />
     </div>
   );
 };
