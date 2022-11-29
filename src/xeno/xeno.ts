@@ -8,12 +8,13 @@ import {
   HandlerFunction,
 } from "./type";
 import { map2Array, toObservable, isDev } from "./util";
+const LOG = false;
 const log = (
   target: "LISTENER" | "SENDER",
   name: string | any,
   ...args: unknown[]
 ) => {
-  if (isDev) {
+  if (isDev && LOG) {
     console.info(`[${target}]`, name, `${new Date().toISOString()}`, ...args);
   }
 };
@@ -108,10 +109,7 @@ export class Xeno<Messages extends TXenoMessage> {
       });
   };
 
-  _checkIfHasFutureEvent: XenoListener<Messages> = (
-    name,
-    handler
-  ) => {
+  _checkIfHasFutureEvent: XenoListener<Messages> = (name, handler) => {
     if (this._futureEvents.has(name)) {
       log("LISTENER", name, "FUTURE TASK TRIGGERED");
       this._executeFutureEvent(name, handler);
@@ -136,10 +134,7 @@ export class Xeno<Messages extends TXenoMessage> {
    * @memberof Xeno3
    * implementation 2: each time create a new subject
    */
-  trigger: XenoEmitter<Messages, Observable<any>> = (
-    name,
-    params
-  ) => {
+  trigger: XenoEmitter<Messages, Observable<any>> = (name, params) => {
     const handlerIns = this.events.get(name);
     const sub = new ReplaySubject<any>();
     if (!handlerIns || handlerIns.numOfListeners === 0) {
