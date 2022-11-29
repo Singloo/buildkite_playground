@@ -14,13 +14,14 @@ export class ElmPositionService {
         w: 0,
       };
     }
+    const boundingRect = elm.getBoundingClientRect();
+    const { width, height, top, left } = boundingRect;
 
-    const { offsetLeft, offsetHeight, offsetTop, offsetWidth } = elm;
     return {
-      top: offsetTop,
-      left: offsetLeft,
-      h: offsetHeight,
-      w: offsetWidth,
+      top,
+      left,
+      h: height,
+      w: width,
     };
   };
 }

@@ -13,8 +13,12 @@ export class Demo1Service {
     this.demo1Store.increase();
   };
 
+  getElmPosition = (elmId: string) => {
+    return this.elmPositionService.getElmPosition(elmId);
+  };
+
   getAndSetElmPosition = (elmId: string) => {
-    const position = this.elmPositionService.getElmPosition(elmId);
+    const position = this.getElmPosition(elmId);
     this.demo1Store.setPosition(position);
   };
 }
