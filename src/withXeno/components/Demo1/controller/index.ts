@@ -24,4 +24,9 @@ export class Demo1Controller extends BaseController {
   onClickIncrease = () => {
     this.service.increase();
   };
+
+  onBoxRemove = (boxId: number) => {
+    console.warn("remove box", boxId);
+    this.service.removeBoxById(boxId);
+  };
 }

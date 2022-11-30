@@ -1,6 +1,7 @@
 import { BaseController } from "src/types";
 import { Instantiable } from "src/withXeno/inversify";
 import { Demo1Service } from "src/withXeno/services/Demo1/demo1.service";
+import { xeno } from "src/withXeno/xeno";
 
 @Instantiable()
 export class BoxController extends BaseController {
@@ -16,5 +17,9 @@ export class BoxController extends BaseController {
 
   getElmPosition = (elmId: string) => {
     return this.service.getElmPosition(elmId);
+  };
+
+  onBoxCollide = (id: number) => {
+    xeno.trigger("REMOVE_BOX", id);
   };
 }

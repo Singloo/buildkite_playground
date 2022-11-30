@@ -12,7 +12,7 @@ export const connectStores =
     stores: Stores
   ) =>
   <P extends IncluedProps & JSX.IntrinsicAttributes>(
-    Comp: React.ComponentType<P>
+    Comp: React.FunctionComponent<P>
   ) => {
     const compProps: Partial<
       { controller: C | undefined } & { [K in keyof Stores]: any }
@@ -23,6 +23,7 @@ export const connectStores =
     Object.entries(stores).forEach(([key, value]) => {
       compProps[key as keyof Stores] = resolve(value as ClassLike<any>);
     });
+    const CompObserver = observer(Comp);
     function Enhanced(props: Omit<P, keyof IncluedProps>) {
       const _props = {
         ...props,
@@ -32,11 +33,11 @@ export const connectStores =
         compProps.controller?.componentDidMount();
         return () => compProps.controller?.componentWillUnmount();
       }, []);
-      return <Comp {..._props} />;
+      return <CompObserver {..._props} />;
     }
     Enhanced.displayName =
       `connected-with-${controller?.name ?? ""}-${Object.values(stores)
         .map((o) => o.name)
         .join("-")}` + Comp.displayName;
-    return observer(Enhanced);
+    return Enhanced;
   };

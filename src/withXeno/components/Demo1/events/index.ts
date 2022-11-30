@@ -9,3 +9,5 @@ export type BROADCAST_POSITION = TXenoMessage<
     h: number;
   }
 >;
+
+export type REMOVE_BOX = TXenoMessage<"REMOVE_BOX", number>;
