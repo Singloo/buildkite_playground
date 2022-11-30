@@ -9,11 +9,11 @@ import { RenderCounter } from "src/components/RenderCounter";
 
 type MBoxProps = {
   demo1Store: Demo1Store;
-  idx: number;
+  id: number;
   controller: BoxController;
 };
 
-export const MBox = ({ demo1Store, controller, idx }: MBoxProps) => {
+export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
   const [size, setSize] = useState(50);
@@ -27,16 +27,17 @@ export const MBox = ({ demo1Store, controller, idx }: MBoxProps) => {
     setSize(randomNumber(50, 100));
     setTop(randomNumber(0, 90));
     setLeft(randomNumber(0, 90));
-  }, [idx]);
+  }, [id]);
   const [isIntersected, setIntersected] = useState(false);
 
   useEffect(() => {
     if (!top || !left || size === 50) return;
-    const position = controller.getElmPosition("box" + idx);
+    const position = controller.getElmPosition("box" + id);
     setPosition(position);
-  }, [controller, idx, top, left, size]);
+  }, [controller, id, top, left, size]);
 
   useEffect(() => {
+    console.warn("listen", id);
     const unlisten = xeno.on("BORADCAST_POSITION", (movingLine) => {
       const isIntersected =
         movingLine.left > position.left &&
@@ -44,15 +45,21 @@ export const MBox = ({ demo1Store, controller, idx }: MBoxProps) => {
       if (isIntersected) {
         // intersected
         setIntersected(true);
+        console.warn("collide", id);
+        controller.onBoxCollide(id);
       } else {
         setIntersected(false);
       }
     });
-    return unlisten;
-  }, [position, idx]);
+    return () => {
+      console.warn("unlisten", id);
+      unlisten();
+    };
+  }, [position, id, controller]);
+  console.warn("box", id);
   return (
     <Box
-      id={"box" + idx}
+      id={"box" + id}
       className={"bg-teal-300 border rounded-sm border-purple-400"}
       $size={size}
       style={{
@@ -61,7 +68,7 @@ export const MBox = ({ demo1Store, controller, idx }: MBoxProps) => {
         backgroundColor: isIntersected ? "red" : undefined,
       }}
     >
-      {idx}
+      {id}
       <RenderCounter />
     </Box>
   );
