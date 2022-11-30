@@ -121,8 +121,9 @@ export class Xeno<Messages extends TXenoMessage> {
       this.events.set(name, new Handlers(name));
     }
     this._checkIfHasFutureEvent(name, handler);
-    this.events.get(name)!.addHandler(handler);
-    const unlisten = () => this.events.delete(name);
+    const eventHandler = this.events.get(name) as Handlers<Messages>;
+    const removeHandler = eventHandler.addHandler(handler);
+    const unlisten = () => removeHandler();
     log("LISTENER", name, "TOTAL", this.events.get(name)!.numOfListeners);
 
     return unlisten;
