@@ -1,6 +1,12 @@
-import 'reflect-metadata';
-import { Injectable, resolve, Instantiable, container } from '../inversify';
-import { makeObservable, observable, action } from 'mobx';
+import "reflect-metadata";
+import {
+  Injectable,
+  resolve,
+  Instantiable,
+  container,
+  unionResolve,
+} from "../inversify";
+import { makeObservable, observable, action } from "mobx";
 
 @Injectable({ singleton: true })
 class Store1 {
@@ -40,7 +46,7 @@ class Service1 {
 
   invoke = () => {
     this.store1.increase();
-    console.log('[Service1]', this.store1.count);
+    console.log("[Service1]", this.store1.count);
   };
   get getCount() {
     return this.store1.count;
@@ -52,21 +58,21 @@ class Service2 {
   constructor(private store2: Store2) {}
   invoke = () => {
     this.store2.increase2();
-    console.log('[Service2]', this.store2.count2);
+    console.log("[Service2]", this.store2.count2);
   };
   get getCount() {
     return this.store2.count2;
   }
 }
 
-test('Resolve', () => {
+test("Resolve", () => {
   const instance = resolve(Service1);
   expect(instance instanceof Service1).toBe(true);
   instance.invoke();
   expect(instance.getCount).toBe(1);
 });
 
-test('Resolve 2 layer', () => {
+test("Resolve 2 layer", () => {
   class BaseController {
     method1() {}
     mehod2() {}
@@ -97,11 +103,18 @@ test('Resolve 2 layer', () => {
   expect(instance.service2Count).toBe(2);
 });
 
-test('Constant registration', () => {
+test("Constant registration", () => {
   const obj = {
-    a: 'a',
+    a: "a",
   };
-  container.bind<typeof obj>('constant').toConstantValue(obj);
-  const res = container.get<typeof obj>('constant');
-  expect(res.a).toBe('a');
+  container.bind<typeof obj>("constant").toConstantValue(obj);
+  const res = container.get<typeof obj>("constant");
+  expect(res.a).toBe("a");
+});
+
+test("Union resolve", () => {
+  const [store2, service2] = unionResolve(Store2, Service2);
+  store2.increase2();
+  expect(store2.count2).toBe(2);
+  expect(service2.getCount).toBe(2);
 });

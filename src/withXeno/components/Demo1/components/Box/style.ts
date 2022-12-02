@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-export const Box = styled.div<{ $size: number }>`
+export const Box = styled(motion.div)<{ $size: number }>`
   display: flex;
   position: absolute;
   flex-direction: column;
