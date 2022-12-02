@@ -17,11 +17,12 @@ export const Demo1 = (props: Demo1Props) => {
   const { demo1Store, controller, boxManagerStore } = props;
   const [run, setRun] = useState(true);
   useEffect(() => {
+    if (!run) return;
     const obsr = controller.startBoradcastPosition("movingline");
     const sub = obsr.subscribe(() => {});
 
     return () => sub.unsubscribe();
-  }, [controller]);
+  }, [controller, run]);
 
   useEffect(() => {
     const unlisten = xeno.on("REMOVE_BOX", controller.onBoxRemove);
