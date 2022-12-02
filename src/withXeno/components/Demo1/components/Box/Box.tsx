@@ -31,13 +31,20 @@ export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
   const [isIntersected, setIntersected] = useState(false);
 
   useEffect(() => {
-    if (!top || !left || size === 50) return;
+    if (!top && !left && size === 50)
+      return setPosition({
+        top: 0,
+        left: 0,
+        w: 50,
+        h: 50,
+      });
     const position = controller.getElmPosition("box" + id);
     setPosition(position);
+    console.warn("position set", "id" + id, position);
   }, [controller, id, top, left, size]);
 
   useEffect(() => {
-    console.warn("listen", id);
+    console.warn("listen broad case", "id" + id, position);
     const unlisten = xeno.on("BORADCAST_POSITION", (movingLine) => {
       const isIntersected =
         movingLine.left > position.left &&
@@ -45,18 +52,18 @@ export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
       if (isIntersected) {
         // intersected
         setIntersected(true);
-        console.warn("collide", id);
+        console.warn("collide", "id" + id);
         controller.onBoxCollide(id);
       } else {
         setIntersected(false);
       }
     });
     return () => {
-      console.warn("unlisten", id);
+      console.warn("unlisten ", "id" + id, position);
       unlisten();
     };
   }, [position, id, controller]);
-  console.warn("box", id);
+  console.warn("box render", "id" + id);
   return (
     <Box
       id={"box" + id}
