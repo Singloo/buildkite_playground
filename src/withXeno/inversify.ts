@@ -103,6 +103,7 @@ function unionResolve<T1, T2, T3, T4, T5>(
     ClassLike<T5>
   ]
 ): [T1, T2, T3, T4, T5];
+function unionResolve(...targets: ClassLike<any>[]): any[]; // TODO, resolve type hints
 function unionResolve(...targets: ClassLike<any>[]): any[] {
   const sharedContainer = new Container();
   return targets.map((target) => resolve(target, sharedContainer));
