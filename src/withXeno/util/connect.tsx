@@ -1,21 +1,38 @@
 import { BaseController } from "src/types";
-import { ClassLike, resolve } from "src/withXeno/inversify";
+import { ClassLike, resolve, unionResolve } from "src/withXeno/inversify";
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
-export const connectStores =
-  <
-    C extends BaseController,
-    Stores extends Record<string, ClassLike<any>>,
-    IncluedProps = { controller: C | undefined } & { [K in keyof Stores]: any }
-  >(
-    controller: ClassLike<C> | undefined,
-    stores: Stores
-  ) =>
-  <P extends IncluedProps & JSX.IntrinsicAttributes>(
+
+interface Enhanced<P> {
+  (props: P): JSX.Element;
+  displayName: string;
+}
+
+type Enhancer<IncluedProps> = <
+  P extends IncluedProps & JSX.IntrinsicAttributes
+>(
+  Comp: React.FunctionComponent<P>
+) => Enhanced<Omit<P, keyof IncluedProps>>;
+
+function connectStores<
+  Stores extends Record<string, ClassLike<any>>,
+  IncluedProps = { [K in keyof Stores]: any }
+>(stores: Stores): Enhancer<IncluedProps>;
+function connectStores<
+  Stores extends Record<string, ClassLike<any>>,
+  C extends BaseController,
+  IncluedProps = { controller: C } & { [K in keyof Stores]: any }
+>(stores: Stores, controller: ClassLike<C>): Enhancer<IncluedProps>;
+function connectStores<
+  Stores extends Record<string, ClassLike<any>>,
+  C extends BaseController,
+  IncluedProps = { controller?: C } & { [K in keyof Stores]: any }
+>(stores: Stores, controller?: ClassLike<C>): Enhancer<IncluedProps> {
+  const enhanceComp = <P extends IncluedProps & JSX.IntrinsicAttributes>(
     Comp: React.FunctionComponent<P>
   ) => {
     const compProps: Partial<
-      { controller: C | undefined } & { [K in keyof Stores]: any }
+      { controller?: C } & { [K in keyof Stores]: any }
     > = {};
     if (controller) {
       compProps["controller"] = resolve(controller);
@@ -41,3 +58,7 @@ export const connectStores =
         .join("-")}` + Comp.displayName;
     return Enhanced;
   };
+  return enhanceComp;
+}
+
+export { connectStores };

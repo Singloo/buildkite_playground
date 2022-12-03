@@ -3,6 +3,6 @@ import { MBox } from "./Box";
 import { connectStores } from "src/withXeno/util/connect";
 import { Demo1Store } from "src/withXeno/stores/Demo1/demo1.store";
 
-const Enhanced = connectStores(BoxController, { demo1Store: Demo1Store })(MBox);
+const Enhanced = connectStores({ demo1Store: Demo1Store }, BoxController)(MBox);
 
 export default Enhanced;
