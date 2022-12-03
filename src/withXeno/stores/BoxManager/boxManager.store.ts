@@ -8,8 +8,8 @@ export class BoxManagerStore {
   constructor() {
     makeObservable(this, {
       currentBoxes: observable,
-      removeBoxById: action.bound,
-      generateBoxes: action.bound,
+      removeBoxById: action,
+      generateBoxes: action,
     });
   }
   nextBoxId = 11;
