@@ -45,7 +45,7 @@ export const MBox = ({
   }, [controller, id, top, left, height]);
 
   useEffect(() => {
-    console.warn("listen broad case", "id" + id, position);
+    console.warn("listen broadcast", "id" + id, position);
     let fromRight = true;
     const unlisten = xeno.on("BORADCAST_POSITION", (movingLine) => {
       const _isIntersected =
