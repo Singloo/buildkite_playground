@@ -10,16 +10,14 @@ const zip = (arr1: unknown[], arr2: unknown[]): [unknown, unknown][] => {
   });
   return res;
 };
-interface Enhanced<P> {
-  (props: P): JSX.Element;
-  displayName: string;
-}
 
 type Enhancer<IncluedProps> = <
   P extends IncluedProps & JSX.IntrinsicAttributes
 >(
   Comp: React.FunctionComponent<P>
-) => Enhanced<Omit<P, keyof IncluedProps>>;
+) => React.FunctionComponent<
+  Omit<P, keyof IncluedProps> & JSX.IntrinsicAttributes
+>;
 
 function connectStores<
   Stores extends Record<string, ClassLike<any>>,

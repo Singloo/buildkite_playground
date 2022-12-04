@@ -6,6 +6,9 @@ import { Box } from "../components";
 import { useEffect, useState } from "react";
 import { BoxManagerStore } from "src/withXeno/stores/BoxManager/boxManager.store";
 import { xeno } from "src/withXeno/xeno";
+import { DynamicComp } from "../../DynamicComp";
+import { getBox } from "../components/Box";
+
 type Demo1Props = {
   controller: Demo1Controller;
   demo1Store: Demo1Store;
@@ -33,7 +36,7 @@ export const Demo1 = (props: Demo1Props) => {
     <div>
       <Button2 onClick={() => setRun(!run)}>{run ? "Stop" : "Start"}</Button2>
       {boxManagerStore.currentBoxes.map((id) => (
-        <Box key={"box" + id} id={id} />
+        <DynamicComp key={"box" + id} getComp={getBox} id={id} />
       ))}
       <MovingBox $run={run} id={"movingline"} />
     </div>

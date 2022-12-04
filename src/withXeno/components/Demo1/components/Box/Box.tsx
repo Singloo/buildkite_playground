@@ -17,12 +17,13 @@ export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
   const [size, setSize] = useState(50);
-  const [position, setPosition] = useState<{
-    left: number;
-    top: number;
-    w: number;
-    h: number;
-  }>({ left: 0, top: 0, w: 0, h: 0 });
+  const { position } = demo1Store;
+  // const [position, setPosition] = useState<{
+  //   left: number;
+  //   top: number;
+  //   w: number;
+  //   h: number;
+  // }>({ left: 0, top: 0, w: 0, h: 0 });
   useEffect(() => {
     setSize(randomNumber(50, 100));
     setTop(randomNumber(0, 90));
@@ -31,16 +32,17 @@ export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
   const [isIntersected, setIntersected] = useState(false);
 
   useEffect(() => {
-    if (!top && !left && size === 50)
-      return setPosition({
-        top: 0,
-        left: 0,
-        w: 50,
-        h: 50,
-      });
-    const position = controller.getElmPosition("box" + id);
-    setPosition(position);
-    console.warn("position set", "id" + id, position);
+    if (!top && !left && size === 50) return;
+    // return setPosition({
+    //   top: 0,
+    //   left: 0,
+    //   w: 50,
+    //   h: 50,
+    // });
+    // const position = controller.getElmPosition("box" + id);
+    // setPosition(position);
+    controller.setElmPosition("box" + id);
+    console.warn("position set", "id" + id);
   }, [controller, id, top, left, size]);
 
   useEffect(() => {
