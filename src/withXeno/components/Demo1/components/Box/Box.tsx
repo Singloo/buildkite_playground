@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { BoxController } from "./Box.controller";
 import { xeno } from "src/withXeno/xeno";
 import { RenderCounter } from "src/components/RenderCounter";
+import { motion } from "framer-motion";
 
 type MBoxProps = {
   demo1Store: Demo1Store;
@@ -14,50 +15,54 @@ type MBoxProps = {
 };
 
 export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
-  const [top, setTop] = useState(0);
-  const [left, setLeft] = useState(0);
-  const [size, setSize] = useState(50);
+  const [top, setTop] = useState("0px");
+  const [left, setLeft] = useState("0px");
+  const [height, setHeight] = useState(50);
+  const [width, setWidth] = useState(50);
+  const [paddingLeft, setPaddingLeft] = useState(0);
+  const [paddingRight, setPaddingRight] = useState(0);
   const { position } = demo1Store;
-  // const [position, setPosition] = useState<{
-  //   left: number;
-  //   top: number;
-  //   w: number;
-  //   h: number;
-  // }>({ left: 0, top: 0, w: 0, h: 0 });
   useEffect(() => {
-    setSize(randomNumber(50, 100));
-    setTop(randomNumber(0, 90));
-    setLeft(randomNumber(0, 90));
+    const size = randomNumber(50, 100);
+    setHeight(size);
+    setWidth(size);
+    setTop(randomNumber(0, 85) + "%");
+    setLeft(randomNumber(0, 90) + "%");
   }, [id]);
   const [isIntersected, setIntersected] = useState(false);
 
   useEffect(() => {
-    if (!top && !left && size === 50) return;
-    // return setPosition({
-    //   top: 0,
-    //   left: 0,
-    //   w: 50,
-    //   h: 50,
-    // });
-    // const position = controller.getElmPosition("box" + id);
-    // setPosition(position);
+    if (!top && !left && height === 50) return;
     controller.setElmPosition("box" + id);
     console.warn("position set", "id" + id);
-  }, [controller, id, top, left, size]);
+  }, [controller, id, top, left, height]);
 
   useEffect(() => {
     console.warn("listen broad case", "id" + id, position);
+    let fromRight = true;
     const unlisten = xeno.on("BORADCAST_POSITION", (movingLine) => {
-      const isIntersected =
+      const _isIntersected =
         movingLine.left > position.left &&
         movingLine.left < position.left + position.w;
-      if (isIntersected) {
+      const diff = position.w * 0.1;
+      const lineCrossBox = fromRight
+        ? movingLine.left <= position.left + diff
+        : movingLine.left >= position.left + position.w - diff;
+      if (_isIntersected) {
         // intersected
         setIntersected(true);
-        console.warn("collide", "id" + id);
-        controller.onBoxCollide(id);
+        const gap = fromRight
+          ? position.left + position.w - movingLine.left
+          : movingLine.left - position.left;
+        fromRight ? setPaddingRight(gap) : setPaddingLeft(gap);
+        if (lineCrossBox) {
+          console.warn("collide", "id" + id);
+          controller.onBoxCollide(id);
+        }
       } else {
-        setIntersected(false);
+        if (movingLine.left < position.left) {
+          fromRight = false;
+        }
       }
     });
     return () => {
@@ -69,16 +74,27 @@ export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
   return (
     <Box
       id={"box" + id}
-      className={"bg-teal-300 border rounded-sm border-purple-400"}
-      $size={size}
+      $size={height}
       style={{
-        left: left + "%",
-        top: top + "%",
-        backgroundColor: isIntersected ? "red" : undefined,
+        left: left,
+        top: top,
+        width,
+        paddingLeft,
+        paddingRight,
       }}
     >
-      {id}
-      <RenderCounter />
+      <motion.div
+        className={"bg-teal-300 flex border rounded-sm border-purple-400"}
+        style={{
+          backgroundColor: isIntersected ? "red" : undefined,
+          flex: 1,
+        }}
+      />
+
+      <div className={"flex absolute top-0 right-0 flex-col"}>
+        {id}
+        <RenderCounter />
+      </div>
     </Box>
   );
 };
