@@ -7,14 +7,21 @@ import { BoxController } from "./Box.controller";
 import { xeno } from "src/withXeno/xeno";
 import { RenderCounter } from "src/components/RenderCounter";
 import { motion } from "framer-motion";
+import { BoxManagerStore } from "src/withXeno/stores/BoxManager/boxManager.store";
 
 type MBoxProps = {
   demo1Store: Demo1Store;
+  boxManagerStore: BoxManagerStore;
   id: number;
   controller: BoxController;
 };
 
-export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
+export const MBox = ({
+  demo1Store,
+  controller,
+  id,
+  boxManagerStore,
+}: MBoxProps) => {
   const [top, setTop] = useState("0px");
   const [left, setLeft] = useState("0px");
   const [height, setHeight] = useState(50);
@@ -44,7 +51,7 @@ export const MBox = ({ demo1Store, controller, id }: MBoxProps) => {
       const _isIntersected =
         movingLine.left > position.left &&
         movingLine.left < position.left + position.w;
-      const diff = position.w * 0.1;
+      const diff = position.w * 0.15;
       const lineCrossBox = fromRight
         ? movingLine.left <= position.left + diff
         : movingLine.left >= position.left + position.w - diff;
