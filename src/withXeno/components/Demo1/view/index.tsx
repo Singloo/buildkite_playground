@@ -2,7 +2,6 @@ import { Demo1Store } from "src/withXeno/stores/Demo1/demo1.store";
 import { Demo1Controller } from "../controller";
 import { Button2 } from "src/components";
 import { MovingBox } from "./style";
-import { Box } from "../components";
 import { useEffect, useState } from "react";
 import { BoxManagerStore } from "src/withXeno/stores/BoxManager/boxManager.store";
 import { xeno } from "src/withXeno/xeno";
@@ -17,7 +16,7 @@ type Demo1Props = {
 };
 
 export const Demo1 = (props: Demo1Props) => {
-  const { demo1Store, controller, boxManagerStore } = props;
+  const { controller, boxManagerStore } = props;
   const [run, setRun] = useState(true);
   useEffect(() => {
     if (!run) return;
