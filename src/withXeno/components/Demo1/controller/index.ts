@@ -15,7 +15,7 @@ export class Demo1Controller extends BaseController {
     return interval(Math.round(1000 / 60)).pipe(
       switchMap(() => of(this.service.getElmPosition(elmId))),
       switchMap((position) => {
-        return xeno.trigger("BORADCAST_POSITION", position);
+        return xeno.trigger('BORADCAST_POSITION', position);
       })
     );
   };
